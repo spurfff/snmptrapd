@@ -8,6 +8,7 @@ ENV SNMP_LOG_DIR="/var/log/snmptrapd"
 ENV SNMP_LOG_FILE="/var/log/snmptrapd/snmptrapd.log"
 ENV SYSLOG_CONF_DIR="/etc/syslog-ng"
 ENV SYSLOG_CONF_FILE="${SYSLOG_CONF_DIR}/syslog-ng.conf"
+ENV TZ="/usr/share/zoneinfo/America/Los_Angeles"
 
 # Update and install necessary files
 RUN dnf makecache && dnf install -y \
@@ -35,6 +36,9 @@ COPY syslog-ng.conf ${SYSLOG_CONF_FILE}
 # Some basic MIB files for monitoring Windows 11 hosts
 COPY HOST-RESOURCES-MIB.txt ${MIBS}
 COPY HOST-RESOURCES-TYPES.txt ${MIBS}
+
+# Set the timezone
+RUN ln -sf ${TZ} /etc/localtime
 
 WORKDIR ${HOME}
 
